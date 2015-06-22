@@ -1,10 +1,10 @@
 /*
 author: Berty Ruan
-files: resumeBuilder.js
+files: js/meJsonPackets.js
 date: June 20, 2015
+info: JSON packets that a server will deliver. Since I don't have one, this will do.
 */
 
-//JSON template for resume content
 
 var bio = {
 	"name": "Berty Ruan",
@@ -19,6 +19,27 @@ var bio = {
 					"K12 education", "community engagement", "Christianity"],
 	"bioPic": "images/NA"
 };
+
+
+
+var projects = {
+	"projects": [
+	 {
+	 	"title": "Ajax-Project",
+	 	"dates": "6/13/2015 - 6/20/2015",
+	 	"description": "blahblahblahblah",
+	 	"images": ["images/NA", "images/NA"]
+	 },
+	 {
+	 	"title": "DAV3I",
+	 	"dates": "January 2015 - May 2015",
+	 	"description": "blahblahblahblah",
+	 	"images": ["images/NA", "images/NA"]
+	 }]
+};
+
+
+
 
 var work = {
 	"jobs" : [
@@ -38,21 +59,6 @@ var work = {
 	 }] 
 };
 
-var projects = {
-	"projects": [
-	 {
-	 	"title": "Ajax-Project",
-	 	"dates": "6/13/2015 - 6/20/2015",
-	 	"description": "blahblahblahblah",
-	 	"images": ["images/NA", "images/NA"]
-	 },
-	 {
-	 	"title": "DAV3I",
-	 	"dates": "January 2015 - May 2015",
-	 	"description": "blahblahblahblah",
-	 	"images": ["images/NA", "images/NA"]
-	 }]
-};
 
 var education = {
 	"schools": [
