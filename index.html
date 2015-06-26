@@ -10,26 +10,30 @@ curr: fun with canvas!
 
 <html>
 <head>
+	<meta charset="utf-8">
 	<link rel="shortcut icon" type="images/x-icon" href="images/favicon.png">
 	<script src='js/libs/jquery.min.js'></script>
+    <!-- script tags here will contain only variable declarations (like header files) -->
+	<script src='js/blogJsonPackets.js'></script>
+	<script src='js/blogHTMLDefinitions.js'></script>
+
 	<title>ChineseBaloni's</title>
 </head>
 <body>
 	<div>
-		<div id='navbar'>
-		</div>
+		<div id='navbar'></div>
 		<div id='blogpanel'>
 			<h1>Blogs will go Here</h1>
-			<ul id='blogs'></ul>
+			<ul id="blogs">
+			</ul>
 		</div>
 		<div>
 			<canvas id='canvas' width='200' height='200'></canvas>
-
 		</div>
-		<canvas id='caaa' width='200' height='200'></canvas>
 	</div>
 
-	<!-- placed here for optimization (why, I don't know yet)	-->
+	<!-- script tags here will interact with the DOM -->
 	<script src='js/blogBuilder.js'></script>
+	<!-- <script src='js/forExperimentation.js'></script> -->
 </body>
 </html>

@@ -2,32 +2,35 @@
 author: Berty Ruan
 file: js/blogIndexBuilder.js
 date: June 21, 2015
+info: json format for my blog content. Mimicing server call backs and javascript code that I'm playing around with and learning
+This section was the most tedious to code. Although it's only 10 lines long haha...
 */
 
-var c = document.querySelector("canvas");
-var ctx = c.getContext("2d"); //ctx stands for context
-var drawMe = { 
-	fill: function(){ctx.fill();},
-	stroke: function(){ctx.fill();},
-}
 
-ctx.fillRect(100,100,100,100);
-ctx.strokeRect(50,50,50,50);
-ctx.strokeRect(75,75,50,50);
 
-$.each(drawMe, function(index, element){
-	ctx.beginPath();
-	ctx.lineTo(50,50);
-	if(index === "fill")
-	{
-		ctx.lineTo(50,10);
-	}
-	else
-	{
-		ctx.lineTo(10,50);
-	}
-	ctx.lineTo(10,10);
-	element;
-	drawMe[index]();
-});
+
+$.each(blogs, function(index, element){
+
+	$.each(element, function(index, data){
+		var HTMLblogSection_r = HTMLblogSection;
+
+		HTMLblogSection_r = HTMLblogSection_r.replace("%data1%", data.title);
+			console.log(HTMLblogSection_r);
+		HTMLblogSection_r = HTMLblogSection_r.replace("%data2%", data.created);
+			console.log(HTMLblogSection_r);
+		HTMLblogSection_r = HTMLblogSection_r.replace("%data3%", data.content);
+			console.log(HTMLblogSection_r);
+		$("#blogs").append(HTMLblogSection_r);
+		console.log(HTMLblogSection_r);
+console.log(HTMLblogSection);
+
+	});
+
+
+
+})
+
+
+
+
 
