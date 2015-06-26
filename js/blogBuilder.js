@@ -7,7 +7,7 @@ This section was the most tedious to code. Although it's only 10 lines long haha
 */
 
 
-
+var HTMLblogSection =  "<li><h2>%data1%</h2><span>Created: %data2%</span>%data3%</li>";
 
 $.each(blogs, function(index, element){
 
