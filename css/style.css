@@ -3,3 +3,23 @@ author: Berty Ruan
 file: style.css
 date: June 20, 2015
 */
+
+* {
+	padding: 0;
+	margin: 0;
+	font-family: 'Roboto';
+
+}
+
+h1, h2 {
+	/*font size, color, height, display*/
+	margin: 2.5% 5% 2.5% 5%;
+	background: grey;
+
+}
+
+.center-content {
+	padding: 2.5% 5% 2.5% 5%;
+	background: rgba(46, 204, 113,1.0);
+
+}
