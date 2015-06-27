@@ -12,6 +12,7 @@ curr: fun with canvas!
 <head>
 	<meta charset="utf-8">
 	<link rel="shortcut icon" type="images/x-icon" href="images/favicon.png">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<script src='js/libs/jquery.min.js'></script>
     <!-- script tags here will contain only variable declarations (like header files) -->
 	<script src='js/blogJsonPackets.js'></script>
@@ -20,16 +21,14 @@ curr: fun with canvas!
 	<title>ChineseBaloni's</title>
 </head>
 <body>
+	<div id='navbar'></div>
+	<h1>Blogs will go Here</h1>
+	<div id='blogpanel'>
+		<ul id="blogs">
+		</ul>
+	</div>
 	<div>
-		<div id='navbar'></div>
-		<div id='blogpanel'>
-			<h1>Blogs will go Here</h1>
-			<ul id="blogs">
-			</ul>
-		</div>
-		<div>
-			<canvas id='canvas' width='200' height='200'></canvas>
-		</div>
+		<canvas id='canvas' width='200' height='200'></canvas>
 	</div>
 
 	<!-- script tags here will interact with the DOM -->
