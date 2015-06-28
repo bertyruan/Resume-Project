@@ -9,8 +9,17 @@
 	<h1>Cat pics be here</h1>
 
 	<div>
-		<span id='clicks'></span> clicks so far for cuteness.
+		<span id='clicksc'></span> clicks so far for cuteness.
+		<span id='clicksg'></span> clicks so far for grumpyness. 
+		<div>
+			<h2 id='cutename'></h2>
+			<h2 id='grumpyname'></h2>
+		</div>
+	</div>
+
+	<div id='catpics'>
 		<img id='cute' src="../images/cutecat.jpg">
+		<img id='grumpy' src="../images/grumpycat.jpg">
 	</div>
 
 	
@@ -18,10 +27,42 @@
 <script type="text/javascript">
 
 	var i = 0;
+	var j = 0;
+	$('#clicks').append(i);
+	$('#cutename').append("Cutie");
+	$('#grumpyname').append("Grumpy");
+
 	$('#cute').click(function(e) {
 		i++;
-		$('#clicks').empty().append(i);
+		$('#clicksc').empty().append(i);
+	});
+
+	$('#grumpy').click(function(e) {
+		j++;
+		$('#clicksg').empty().append(j);
 	});
 
 </script>
+<style type="text/css">
+
+
+	#catpics {
+		padding: 5%;
+	}
+
+	#cute, #cutename{
+		float: left;
+	}
+
+	#grumpy, #grumpyname{
+		float: right;
+	}
+
+	img {
+		width: 45%;
+		height: 100%;
+	}
+
+
+</style>
 </html>
