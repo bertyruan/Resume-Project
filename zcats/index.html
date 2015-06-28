@@ -7,62 +7,84 @@
 </head>
 <body>
 	<h1>Cat pics be here</h1>
+	<h3>Jinx they're not all cats</h3>
 
 	<div>
-		<span id='clicksc'></span> clicks so far for cuteness.
-		<span id='clicksg'></span> clicks so far for grumpyness. 
-		<div>
-			<h2 id='cutename'></h2>
-			<h2 id='grumpyname'></h2>
-		</div>
+		<ul id='catpics'>
+
+		</ul>
 	</div>
 
-	<div id='catpics'>
-		<img id='cute' src="../images/cutecat.jpg">
-		<img id='grumpy' src="../images/grumpycat.jpg">
-	</div>
-
-	
 </body>
 <script type="text/javascript">
 
+	/*$.ajax({
+		url: '../images',
+		dataType: 'data'
+
+	}).done(function(data){
+		console.log(data);
+	});*/
+
+	var images = ['cutecat.jpg', 'drpepper.jpg', 'favicon.jpg', 'grumpycat.jpg', 'labcoat.jpg'];
+
+	$.each(images, function(index,element){
+
+		//create the lists
+		var oLi = document.createElement('li');
+		var liName = 'catli' + index;
+		oLi.setAttribute('id', liName);
+
+		//create the clicks
+		var oDiv = document.createElement('div');
+		var divName = 'catbox' + index;
+		oDiv.setAttribute('id', divName);
+
+		//create the span
+		var oSpan = document.createElement('span');
+		var spanName = 'catfood' + index;
+		oSpan.setAttribute('id', spanName);
+
+		//create the individual images
+		var oImg = document.createElement('img');
+		oImg.setAttribute('src', "../images/" + element);
+		oImg.setAttribute('id', "cat" + index);
+
+
+
+		//add clicks
+		var i = 0;
+		oImg.addEventListener('click', (function(itr){
+
+			return function()
+			{
+				itr++;
+				$('#'+spanName).empty().append(itr + "clicks so far");
+			}
+
+		})(i));
+
+		oDiv.appendChild(oSpan);
+		oDiv.appendChild(oImg);
+		oLi.appendChild(oDiv);
+		$('#catpics').append(oLi);
+
+	});
+
+
 	var i = 0;
-	var j = 0;
 	$('#clicks').append(i);
 	$('#cutename').append("Cutie");
 	$('#grumpyname').append("Grumpy");
 
-	$('#cute').click(function(e) {
-		i++;
-		$('#clicksc').empty().append(i);
-	});
-
-	$('#grumpy').click(function(e) {
-		j++;
-		$('#clicksg').empty().append(j);
-	});
-
+	
 </script>
 <style type="text/css">
 
-
-	#catpics {
-		padding: 5%;
-	}
-
-	#cute, #cutename{
-		float: left;
-	}
-
-	#grumpy, #grumpyname{
-		float: right;
-	}
-
 	img {
 		width: 45%;
-		height: 100%;
+		height: 45%;
 	}
-
 
 </style>
 </html>
