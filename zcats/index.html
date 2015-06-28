@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>Cat Clicks</title>
+	<script src='../js/libs/jquery.min.js'></script>
+</head>
+<body>
+	<h1>Cat pics be here</h1>
+
+	<div>
+		<span id='clicks'></span> clicks so far for cuteness.
+		<img id='cute' src="../images/cutecat.jpg">
+	</div>
+
+	
+</body>
+<script type="text/javascript">
+
+	var i = 0;
+	$('#cute').click(function(e) {
+		i++;
+		$('#clicks').empty().append(i);
+	});
+
+</script>
+</html>
