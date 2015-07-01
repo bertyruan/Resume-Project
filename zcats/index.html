@@ -12,15 +12,39 @@
 	<ul id='cat-list'></ul>
 	<div id='clicks' class='clicks'></div>
 	<div id='cat-display'></div>
+	<button id='admin'>Admin</button>
+	<form id='form'>
+		Cat Name: <input type='text' id='cat-name'></br>
+		Click Count: <input type='text' id='click-count'></br>
+		Image Url: <input type='text' id='image-url'></br></br>
+		<span>
+			<button id='submit'>Submit</button>
+			<button id='cancel'>Cancel</button>
+		</span>
+	</form>
 
 </body>
 <script type="text/javascript">
+//problems to fix:
+/*
+	index is a datapoint. look at how it's being passed through so many functions
+		need to add it to the model as currentCat
+	Structure your HTML code out if you know some are going to be permanent. Lists will never be but the Cat View is. Code that out.
+	Use inits as variable declarations, or a way to call other functions
+
+
+*/
 	
 	$(function(){
 		octopus.init();
 	});
 
-	var catdata = [
+	var model = {
+		currentCat : null, //holds JSON object
+		currentCatIndex: null,
+		formIsHidden: true,
+		adminIsHidden: false,
+		catdata : [
 		{
 			name: 'cutecat',
 			clickcount: 0,
@@ -45,73 +69,163 @@
 			name: 'labcoat',
 			clickcount: 0,
 			imageurl: '../images/labcoat.jpg'
-		}
-	];
+		}]
+	};
 
 
 	var octopus = {
 		init: function(){
+			model.currentCat = model.catdata[0];
+			model.currentCatIndex = 0;
 			catList.init();
 			catDisplay.init();
+			adminView.init();
 		},
 
 		getCatList: function(){
 			var catNames = [];			
-			$.each(catdata, function(index,element){
-				catNames.push(element.name);
+			$.each(model.catdata, function(index,element){
+				catNames.push(element);
 			});
 			return catNames;
 		},
 
-		getCatDisplay: function(index){
-			return [catdata[index].name, catdata[index].clickcount, catdata[index].imageurl];
+
+		updateClicks: function(){
+			model.currentCat.clickcount++;
+			catDisplay.render();
 		},
 
-		updateClicks: function(index){
-			catdata[index].clickcount++;
+		setCurrentCat: function(index, cat){
+			model.currentCat = cat;
+			model.currentCatIndex = index;
+		},
+
+		getCurrentCat: function(){
+			return model.currentCat;
+		},
+
+		formIsHidden: function(){
+			return model.formIsHidden;
+		},
+
+		setFormVisibility: function(){
+			model.formIsHidden = !model.formIsHidden;
+		},
+
+		adminIsHidden: function(){
+			return model.adminIsHidden;
+		},
+
+		updateModel: function(name, count, url){
+			var currentCat = model.catdata[model.currentCatIndex];
+			currentCat.name = name;
+			currentCat.clickcount = count;
+			currentCat.imageurl = url;
+		}
+	};
+
+	var catDisplay = {
+		init: function(){
+			this.catdisplay = $('#cat-display');
+			this.render();
+		},
+		render: function(){
+			$('#clicks').html(octopus.getCurrentCat().name + ": " + octopus.getCurrentCat().clickcount);
+			var htmlStr = "<img id='pics' src='" + octopus.getCurrentCat().imageurl + "'/>";
+			this.catdisplay.html(htmlStr);
+			$('#pics').click(function(){
+				octopus.updateClicks();
+				adminView.render();
+			});
 		}
 	};
 
 	var catList = {
 		init: function(){
-			var catlist_id = $("#cat-list");
+			this.catlist = $('#cat-list');
+			this.render();
+		},
+
+		render: function(){
+			this.catlist.html('');
 			$.each(octopus.getCatList(), function(index, element){
-				var htmlStr = "<li class='cat-name'><button id='cat" + index + "'>" + element + "</button>" + "</li>";
-				catlist_id.append(htmlStr);
+				var htmlStr = "<li class='cat-name'><button id='cat" + index + "'>" + element.name + "</button>" + "</li>";
+				$("#cat-list").append(htmlStr);
 				$('#cat'+index).click(function(){
-					catDisplay.renderPicture(index);
+					octopus.setCurrentCat(index, element);
+					catDisplay.render();
+					adminView.render();
 				});
 			});
 			
 		}
 	};
 
-	var catDisplay = {
+	var adminView = {
 		init: function(){
-			catDisplay.renderPicture(0);
-		},
-		renderPicture: function(index){
-			catDisplay.renderCount(index);
-			var catdisplay_id = $('#cat-display');
-			var htmlStr = "<img id='pics' src='" + octopus.getCatDisplay(index)[2] + "'/>";
-			catdisplay_id.html(htmlStr);
-			$('#pics').click(function(){
-				octopus.updateClicks(index);
-				catDisplay.renderCount(index);
-			});
-		},
-		renderCount: function(index){
-			$('#clicks').html(octopus.getCatDisplay(index)[0] + ": " + octopus.getCatDisplay(index)[1]);
-		}
+			if(!octopus.adminIsHidden())
+			{
+				document.getElementById('admin').style.visibility = "visible";
+				$('#admin').click(function(){
+					if(octopus.formIsHidden()){
+						adminView.render();
+						document.getElementById('form').style.visibility = "visible";
+						octopus.setFormVisibility();
+					}
+				});
 
+				$('#submit').click(function(e){
+					e.preventDefault();
+					document.getElementById('form').style.visibility = "visible";
+					adminView.update();
+					catDisplay.render();
+					catList.render();
+				});
+
+
+				$('#cancel').click(function(e){
+					e.preventDefault();
+					if(!octopus.formIsHidden()){
+						document.getElementById('form').style.visibility = "hidden";
+						octopus.setFormVisibility();
+					}
+				});
+			}
+		},
+		render: function(){
+			this.cat = octopus.getCurrentCat();
+			document.getElementById('cat-name').value = this.cat.name;
+			document.getElementById('click-count').value = this.cat.clickcount;
+			document.getElementById('image-url').value = this.cat.imageurl;			
+		},
+		update: function(){
+			octopus.updateModel(document.getElementById('cat-name').value, document.getElementById('click-count').value, document.getElementById('image-url').value);
+		}
 	};
 
 </script>
 <style type="text/css">
+	
+
 
 	img {
 		width: 45%;
 		height: 45%;
+	}
+
+	#admin {
+		visibility: hidden;
+		position: absolute;
+		top: 30%;
+		right: 38%;
+	}
+
+	#form {
+		visibility: hidden;
+		position: absolute;
+		top: 40%;
+		right: 30%;
 	}
 
 	.clicks {
