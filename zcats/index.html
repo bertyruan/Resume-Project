@@ -9,81 +9,125 @@
 	<h1>Cat pics be here</h1>
 	<h3>Jinx they're not all cats</h3>
 
-	<div>
-		<ul id='catpics'>
-
-		</ul>
-	</div>
+	<ul id='cat-list'></ul>
+	<div id='clicks' class='clicks'></div>
+	<div id='cat-display'></div>
 
 </body>
 <script type="text/javascript">
-
-	/*$.ajax({
-		url: '../images',
-		dataType: 'data'
-
-	}).done(function(data){
-		console.log(data);
-	});*/
-
-	var images = ['cutecat.jpg', 'drpepper.jpg', 'favicon.jpg', 'grumpycat.jpg', 'labcoat.jpg'];
-
-	$.each(images, function(index,element){
-
-		//create the lists
-		var oLi = document.createElement('li');
-		var liName = 'catli' + index;
-		oLi.setAttribute('id', liName);
-
-		//create the clicks
-		var oDiv = document.createElement('div');
-		var divName = 'catbox' + index;
-		oDiv.setAttribute('id', divName);
-
-		//create the span
-		var oSpan = document.createElement('span');
-		var spanName = 'catfood' + index;
-		oSpan.setAttribute('id', spanName);
-
-		//create the individual images
-		var oImg = document.createElement('img');
-		oImg.setAttribute('src', "../images/" + element);
-		oImg.setAttribute('id', "cat" + index);
-
-
-
-		//add clicks
-		var i = 0;
-		oImg.addEventListener('click', (function(itr){
-
-			return function()
-			{
-				itr++;
-				$('#'+spanName).empty().append(itr + "clicks so far");
-			}
-
-		})(i));
-
-		oDiv.appendChild(oSpan);
-		oDiv.appendChild(oImg);
-		oLi.appendChild(oDiv);
-		$('#catpics').append(oLi);
-
+	
+	$(function(){
+		octopus.init();
 	});
 
+	var catdata = [
+		{
+			name: 'cutecat',
+			clickcount: 0,
+			imageurl: '../images/cutecat.jpg'
+		},
+		{
+			name: 'drpepper',
+			clickcount: 0,
+			imageurl: '../images/drpepper.jpg'
+		},
+		{
+			name: 'favicon',
+			clickcount: 0,
+			imageurl: '../images/favicon.jpg'
+		},
+		{
+			name: 'grumpycat',
+			clickcount: 0,
+			imageurl: '../images/grumpycat.jpg'
+		},
+		{
+			name: 'labcoat',
+			clickcount: 0,
+			imageurl: '../images/labcoat.jpg'
+		}
+	];
 
-	var i = 0;
-	$('#clicks').append(i);
-	$('#cutename').append("Cutie");
-	$('#grumpyname').append("Grumpy");
 
-	
+	var octopus = {
+		init: function(){
+			catList.init();
+			catDisplay.init();
+		},
+
+		getCatList: function(){
+			var catNames = [];			
+			$.each(catdata, function(index,element){
+				catNames.push(element.name);
+			});
+			return catNames;
+		},
+
+		getCatDisplay: function(index){
+			return [catdata[index].name, catdata[index].clickcount, catdata[index].imageurl];
+		},
+
+		updateClicks: function(index){
+			catdata[index].clickcount++;
+		}
+	};
+
+	var catList = {
+		init: function(){
+			var catlist_id = $("#cat-list");
+			$.each(octopus.getCatList(), function(index, element){
+				var htmlStr = "<li class='cat-name'><button id='cat" + index + "'>" + element + "</button>" + "</li>";
+				catlist_id.append(htmlStr);
+				$('#cat'+index).click(function(){
+					catDisplay.renderPicture(index);
+				});
+			});
+			
+		}
+	};
+
+	var catDisplay = {
+		init: function(){
+			catDisplay.renderPicture(0);
+		},
+		renderPicture: function(index){
+			catDisplay.renderCount(index);
+			var catdisplay_id = $('#cat-display');
+			var htmlStr = "<img id='pics' src='" + octopus.getCatDisplay(index)[2] + "'/>";
+			catdisplay_id.html(htmlStr);
+			$('#pics').click(function(){
+				octopus.updateClicks(index);
+				catDisplay.renderCount(index);
+			});
+		},
+		renderCount: function(index){
+			$('#clicks').html(octopus.getCatDisplay(index)[0] + ": " + octopus.getCatDisplay(index)[1]);
+		}
+
+	};
+
 </script>
 <style type="text/css">
 
 	img {
 		width: 45%;
 		height: 45%;
+	}
+
+	.clicks {
+		margin-bottom: 25px;
+		margin-left: 17%;
+		font-weight: bold;
+		font-size: 25px;
+
+	}
+
+	.cat-name {
+		display: inline-block;;
+		margin-right: 20px;
+		margin-bottom: 10px;
+		padding: 10px;
+		list-style-type: none;
 	}
 
 </style>
