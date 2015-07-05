@@ -2,247 +2,27 @@
 
 <html>
 <head>
-	<title>Cat Clicks</title>
-	<script src='../js/libs/jquery.min.js'></script>
+	<title>Cat Clicker</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-	<h1>Cat pics be here</h1>
-	<h3>Jinx they're not all cats</h3>
+	<ul data-bind="foreach: catList">
+		<li data-bind="click: $parent.updateCat, text: name"></li>
+	</ul>
+	<div data-bind="with: currentCat">
 
-	<ul id='cat-list'></ul>
-	<div id='clicks' class='clicks'></div>
-	<div id='cat-display'></div>
-	<button id='admin'>Admin</button>
-	<form id='form'>
-		Cat Name: <input type='text' id='cat-name'></br>
-		Click Count: <input type='text' id='click-count'></br>
-		Image Url: <input type='text' id='image-url'></br></br>
-		<span>
-			<button id='submit'>Submit</button>
-			<button id='cancel'>Cancel</button>
-		</span>
-	</form>
+		<h2 data-bind="text: name"></h2>
+		<h4 data-bind="text: computeLevel()"></h4>
+		<div data-bind="text: clickCount"></div>
+		<img src=""  alt='cute cat' data-bind="click: $parent.incrementCounter, attr: {src: imgSrc}">
 
+		<h3>Nicknames</h3>
+		<ul data-bind="foreach: nicknames">
+			<li data-bind="text: name"></li>
+		</ul>
+	</div>
+
+	<script src='../js/libs/knockout-3.3.0.js'></script>
+	<script src='app.js'></script>
 </body>
-<script type="text/javascript">
-//problems to fix:
-/*
-	index is a datapoint. look at how it's being passed through so many functions
-		need to add it to the model as currentCat
-	Structure your HTML code out if you know some are going to be permanent. Lists will never be but the Cat View is. Code that out.
-	Use inits as variable declarations, or a way to call other functions
-
-
-*/
-	
-	$(function(){
-		octopus.init();
-	});
-
-	var model = {
-		currentCat : null, //holds JSON object
-		currentCatIndex: null,
-		formIsHidden: true,
-		adminIsHidden: false,
-		catdata : [
-		{
-			name: 'cutecat',
-			clickcount: 0,
-			imageurl: '../images/cutecat.jpg'
-		},
-		{
-			name: 'drpepper',
-			clickcount: 0,
-			imageurl: '../images/drpepper.jpg'
-		},
-		{
-			name: 'favicon',
-			clickcount: 0,
-			imageurl: '../images/favicon.jpg'
-		},
-		{
-			name: 'grumpycat',
-			clickcount: 0,
-			imageurl: '../images/grumpycat.jpg'
-		},
-		{
-			name: 'labcoat',
-			clickcount: 0,
-			imageurl: '../images/labcoat.jpg'
-		}]
-	};
-
-
-	var octopus = {
-		init: function(){
-			model.currentCat = model.catdata[0];
-			model.currentCatIndex = 0;
-			catList.init();
-			catDisplay.init();
-			adminView.init();
-		},
-
-		getCatList: function(){
-			var catNames = [];			
-			$.each(model.catdata, function(index,element){
-				catNames.push(element);
-			});
-			return catNames;
-		},
-
-
-		updateClicks: function(){
-			model.currentCat.clickcount++;
-			catDisplay.render();
-		},
-
-		setCurrentCat: function(index, cat){
-			model.currentCat = cat;
-			model.currentCatIndex = index;
-		},
-
-		getCurrentCat: function(){
-			return model.currentCat;
-		},
-
-		formIsHidden: function(){
-			return model.formIsHidden;
-		},
-
-		setFormVisibility: function(){
-			model.formIsHidden = !model.formIsHidden;
-		},
-
-		adminIsHidden: function(){
-			return model.adminIsHidden;
-		},
-
-		updateModel: function(name, count, url){
-			var currentCat = model.catdata[model.currentCatIndex];
-			currentCat.name = name;
-			currentCat.clickcount = count;
-			currentCat.imageurl = url;
-		}
-	};
-
-	var catDisplay = {
-		init: function(){
-			this.catdisplay = $('#cat-display');
-			this.render();
-		},
-		render: function(){
-			$('#clicks').html(octopus.getCurrentCat().name + ": " + octopus.getCurrentCat().clickcount);
-			var htmlStr = "<img id='pics' src='" + octopus.getCurrentCat().imageurl + "'/>";
-			this.catdisplay.html(htmlStr);
-			$('#pics').click(function(){
-				octopus.updateClicks();
-				adminView.render();
-			});
-		}
-	};
-
-	var catList = {
-		init: function(){
-			this.catlist = $('#cat-list');
-			this.render();
-		},
-
-		render: function(){
-			this.catlist.html('');
-			$.each(octopus.getCatList(), function(index, element){
-				var htmlStr = "<li class='cat-name'><button id='cat" + index + "'>" + element.name + "</button>" + "</li>";
-				$("#cat-list").append(htmlStr);
-				$('#cat'+index).click(function(){
-					octopus.setCurrentCat(index, element);
-					catDisplay.render();
-					adminView.render();
-				});
-			});
-			
-		}
-	};
-
-	var adminView = {
-		init: function(){
-			if(!octopus.adminIsHidden())
-			{
-				document.getElementById('admin').style.visibility = "visible";
-				$('#admin').click(function(){
-					if(octopus.formIsHidden()){
-						adminView.render();
-						document.getElementById('form').style.visibility = "visible";
-						octopus.setFormVisibility();
-					}
-				});
-
-				$('#submit').click(function(e){
-					e.preventDefault();
-					document.getElementById('form').style.visibility = "visible";
-					adminView.update();
-					catDisplay.render();
-					catList.render();
-				});
-
-
-				$('#cancel').click(function(e){
-					e.preventDefault();
-					if(!octopus.formIsHidden()){
-						document.getElementById('form').style.visibility = "hidden";
-						octopus.setFormVisibility();
-					}
-				});
-			}
-		},
-		render: function(){
-			this.cat = octopus.getCurrentCat();
-			document.getElementById('cat-name').value = this.cat.name;
-			document.getElementById('click-count').value = this.cat.clickcount;
-			document.getElementById('image-url').value = this.cat.imageurl;			
-		},
-		update: function(){
-			octopus.updateModel(document.getElementById('cat-name').value, document.getElementById('click-count').value, document.getElementById('image-url').value);
-		}
-	};
-
-</script>
-<style type="text/css">
-	
-
-
-	img {
-		width: 45%;
-		height: 45%;
-	}
-
-	#admin {
-		visibility: hidden;
-		position: absolute;
-		top: 30%;
-		right: 38%;
-	}
-
-	#form {
-		visibility: hidden;
-		position: absolute;
-		top: 40%;
-		right: 30%;
-	}
-
-	.clicks {
-		margin-bottom: 25px;
-		margin-left: 17%;
-		font-weight: bold;
-		font-size: 25px;
-
-	}
-
-	.cat-name {
-		display: inline-block;;
-		margin-right: 20px;
-		margin-bottom: 10px;
-		padding: 10px;
-		list-style-type: none;
-	}
-
-</style>
 </html>
